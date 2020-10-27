@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import classNames from 'classnames'
 import { format, formatValue, getAttrs, formatAmount, filterObjProps } from './util'
-
+import KeyHandler from '../key-handler'
 /**
  * 自定义属性全小写；原声属性驼峰法
  * @prop type 输入框类型
@@ -102,6 +102,14 @@ class Input extends Component {
       'clearable'
     ])
     return (
+      <KeyHandler keyhandleList={[
+        {
+          code: 'enter',
+          callback:()=>{
+            console.log('触发回车事件')
+          }
+        }
+      ]}>
       <div
         className={classNames('hi-input__out', {
           'hi-input--prepend': prepend,
@@ -123,7 +131,7 @@ class Input extends Component {
           }
           <input
             ref={this._Input}
-            className={`hi-input__text ${disabled ? 'disabled' : ''}`}
+            className={`hi-input__text ${disabled ? 'disabled' : ''} mousetrap`}
             value={this.state.value}
             autoComplete='off'
             disabled={disabled}
@@ -169,21 +177,21 @@ class Input extends Component {
                 this.props.onFocus && this.props.onFocus(e, valueTrue)
               })
             }}
-            onKeyDown={(e) => {
-              const valueTrue = this.state.valueTrue
+            // onKeyDown={(e) => {
+            //   const valueTrue = this.state.valueTrue
 
-              this.props.onKeyDown && this.props.onKeyDown(e, valueTrue)
-            }}
-            onKeyUp={(e) => {
-              const valueTrue = this.state.valueTrue
+            //   this.props.onKeyDown && this.props.onKeyDown(e, valueTrue)
+            // }}
+            // onKeyUp={(e) => {
+            //   const valueTrue = this.state.valueTrue
 
-              this.props.onKeyUp && this.props.onKeyUp(e, valueTrue)
-            }}
-            onKeyPress={(e) => {
-              const valueTrue = this.state.valueTrue
+            //   this.props.onKeyUp && this.props.onKeyUp(e, valueTrue)
+            // }}
+            // onKeyPress={(e) => {
+            //   const valueTrue = this.state.valueTrue
 
-              this.props.onKeyPress && this.props.onKeyPress(e, valueTrue)
-            }}
+            //   this.props.onKeyPress && this.props.onKeyPress(e, valueTrue)
+            // }}
             onInput={(e) => {
               const valueTrue = this.state.valueTrue
 
@@ -230,6 +238,7 @@ class Input extends Component {
           append && <span className='hi-input__append'>{append}</span>
         }
       </div>
+      </KeyHandler>
     )
   }
 
