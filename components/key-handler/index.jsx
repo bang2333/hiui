@@ -1,15 +1,15 @@
-import React from 'react'
+import React, { useCallback } from 'react'
 
 import './mousetrap.js'
 const KeyHandler = ({ children, keyhandleList = [] }) => {
-  const bindKeyCallback = () => {
+  const bindKeyCallback = useCallback(() => {
     keyhandleList.forEach((item) => {
       const { code, callback } = item
       window.Mousetrap.bind(code, (e) => {
         callback && callback(e)
       })
     })
-  }
+  }, [keyhandleList])
   return (
     <div
       id="hi-key-handler"
