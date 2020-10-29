@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef, forwardRef, useCallback } from 'rea
 import classNames from 'classnames'
 import _ from 'lodash'
 
+import KeyHandler from '../key-handler'
 import Popper from '../popper'
 import SelectInput from './SelectInput'
 import SelectDropdown from './SelectDropdown'
@@ -205,18 +206,17 @@ const InternalSelect = (props) => {
   // 按键操作
   const handleKeyDown = useCallback(
     (evt) => {
-      if (evt.keyCode === 13) {
-        onEnterSelect()
-      }
-
-      if (evt.keyCode === 38) {
-        evt.preventDefault()
-        moveFocusedIndex('up')
-      }
-      if (evt.keyCode === 40) {
-        evt.preventDefault()
-        moveFocusedIndex('down')
-      }
+      // if (evt.keyCode === 13) {
+      //   onEnterSelect()
+      // }
+      // if (evt.keyCode === 38) {
+      //   evt.preventDefault()
+      //   moveFocusedIndex('up')
+      // }
+      // if (evt.keyCode === 40) {
+      //   evt.preventDefault()
+      //   moveFocusedIndex('down')
+      // }
     },
     [onEnterSelect, moveFocusedIndex, moveFocusedIndex]
   )
@@ -395,82 +395,89 @@ const InternalSelect = (props) => {
   const selectInputWidth = selectInputContainer.current
     ? selectInputContainer.current.getBoundingClientRect().width
     : null
+  const keyshandle = {
+    backspace: () => {
+      console.log('删除')
+    }
+  }
   return (
-    <div className={classNames('hi-select', className, extraClass)} style={style}>
-      <div className="hi-select__input-container" ref={selectInputContainer}>
-        <SelectInput
-          handleKeyDown={handleKeyDown}
-          theme={theme}
-          mode={type}
-          disabled={disabled}
-          searchable={searchable} // 要删除掉
-          clearable={clearable}
-          dropdownShow={dropdownShow}
-          placeholder={placeholder}
-          selectedItems={selectedItems || []}
-          multipleMode={multipleWrap}
-          cacheSelectItem={cacheSelectItem}
-          onBlur={onBlur}
-          onFocus={onFocus}
-          onClickOption={onClickOption}
-          onClear={deleteAllItems}
-          fieldNames={fieldNames}
-          isFocus={isFocus}
-          value={value}
-          onClick={() => {
-            handleInputClick()
-          }}
-        />
-      </div>
-      {children}
-      <Popper
-        show={dropdownShow}
-        attachEle={selectInputContainer.current}
-        zIndex={1050}
-        topGap={5}
-        leftGap={0}
-        overlayClassName={overlayClassName}
-        setOverlayContainer={setOverlayContainer}
-        // 是否防止溢出功能   暂时不开放
-        preventOverflow={preventOverflow}
-        // 自定义options的方向
-        placement={placement || 'top-bottom-start'}
-        className="hi-select__popper"
-        width={optionWidth}
-        onClickOutside={() => {
-          hideDropdown()
-        }}
-      >
-        <SelectDropdown
-          emptyContent={emptyContent}
-          fieldNames={fieldNames}
-          localeMap={localeDatas.select || {}}
-          mode={type}
-          searchPlaceholder={searchPlaceholder}
-          theme={theme}
-          onBlur={onBlur}
-          onFocus={onFocus}
-          isOnSearch={dataSource}
-          onSearch={debouncedFilterItems}
-          searchable={searchable}
-          showCheckAll={showCheckAll}
-          checkAll={checkAll}
-          loading={loading}
-          focusedIndex={focusedIndex}
-          showJustSelected={showJustSelected}
-          filterOption={filterOption}
-          matchFilter={matchFilter}
+    <KeyHandler keyshandle={keyshandle}>
+      <div className={classNames('hi-select', className, extraClass)} style={style}>
+        <div className="hi-select__input-container" ref={selectInputContainer}>
+          <SelectInput
+            handleKeyDown={handleKeyDown}
+            theme={theme}
+            mode={type}
+            disabled={disabled}
+            searchable={searchable} // 要删除掉
+            clearable={clearable}
+            dropdownShow={dropdownShow}
+            placeholder={placeholder}
+            selectedItems={selectedItems || []}
+            multipleMode={multipleWrap}
+            cacheSelectItem={cacheSelectItem}
+            onBlur={onBlur}
+            onFocus={onFocus}
+            onClickOption={onClickOption}
+            onClear={deleteAllItems}
+            fieldNames={fieldNames}
+            isFocus={isFocus}
+            value={value}
+            onClick={() => {
+              handleInputClick()
+            }}
+          />
+        </div>
+        {children}
+        <Popper
           show={dropdownShow}
-          handleKeyDown={handleKeyDown}
-          optionWidth={optionWidth}
-          selectInputWidth={selectInputWidth}
-          dropdownItems={dropdownItems}
-          selectedItems={selectedItems}
-          dropdownRender={render}
-          onClickOption={onClickOption}
-        />
-      </Popper>
-    </div>
+          attachEle={selectInputContainer.current}
+          zIndex={1050}
+          topGap={5}
+          leftGap={0}
+          overlayClassName={overlayClassName}
+          setOverlayContainer={setOverlayContainer}
+          // 是否防止溢出功能   暂时不开放
+          preventOverflow={preventOverflow}
+          // 自定义options的方向
+          placement={placement || 'top-bottom-start'}
+          className="hi-select__popper"
+          width={optionWidth}
+          onClickOutside={() => {
+            hideDropdown()
+          }}
+        >
+          <SelectDropdown
+            emptyContent={emptyContent}
+            fieldNames={fieldNames}
+            localeMap={localeDatas.select || {}}
+            mode={type}
+            searchPlaceholder={searchPlaceholder}
+            theme={theme}
+            onBlur={onBlur}
+            onFocus={onFocus}
+            isOnSearch={dataSource}
+            onSearch={debouncedFilterItems}
+            searchable={searchable}
+            showCheckAll={showCheckAll}
+            checkAll={checkAll}
+            loading={loading}
+            focusedIndex={focusedIndex}
+            showJustSelected={showJustSelected}
+            filterOption={filterOption}
+            matchFilter={matchFilter}
+            show={dropdownShow}
+            handleKeyDown={handleKeyDown}
+            optionWidth={optionWidth}
+            selectInputWidth={selectInputWidth}
+            dropdownItems={dropdownItems}
+            selectedItems={selectedItems}
+            dropdownRender={render}
+            onClickOption={onClickOption}
+          />
+        </Popper>
+      </div>
+    </KeyHandler>
   )
 }
 

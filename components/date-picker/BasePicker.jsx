@@ -10,7 +10,7 @@ import Popper from '../popper/index'
 import Panel from './components/Panel'
 import RangePanel from './components/RangePanel'
 import Root from './components/Root'
-
+import KeyHandler from '../key-handler'
 import './style/index'
 
 const BasePicker = ({
@@ -136,65 +136,74 @@ const BasePicker = ({
     shortcuts && 'hi-datepicker__popper--shortcuts',
     isLarge && 'hi-datepicker__popper--large'
   )
-
+  const keyshandle = {
+    backspace: () => {
+      console.log('删除')
+    },
+    enter: () => {
+      console.log('点击回车')
+    }
+  }
   return (
-    <DPContext.Provider
-      value={{
-        ...otherPorps,
-        locale,
-        type,
-        outDate,
-        localeDatas,
-        weekOffset,
-        onPick,
-        min,
-        max,
-        disabled,
-        placeholder,
-        showTime,
-        format,
-        timeInterval,
-        shortcuts,
-        altCalendar,
-        altCalendarPreset,
-        dateMarkRender,
-        dateMarkPreset,
-        altCalendarPresetData,
-        dateMarkPresetData,
-        clearable,
-        theme,
-        width,
-        hourStep,
-        minuteStep,
-        secondStep,
-        inputReadOnly
-      }}
-    >
-      <Root
-        inputChangeEvent={inputChangeEvent}
-        onClear={onClear}
-        showPanel={showPanel}
-        inputFocus={inputFocus}
-        onTrigger={() => {
-          setShowPanel(true)
-          setInputFocus(true)
+    <KeyHandler keyshandle={keyshandle}>
+      <DPContext.Provider
+        value={{
+          ...otherPorps,
+          locale,
+          type,
+          outDate,
+          localeDatas,
+          weekOffset,
+          onPick,
+          min,
+          max,
+          disabled,
+          placeholder,
+          showTime,
+          format,
+          timeInterval,
+          shortcuts,
+          altCalendar,
+          altCalendarPreset,
+          dateMarkRender,
+          dateMarkPreset,
+          altCalendarPresetData,
+          dateMarkPresetData,
+          clearable,
+          theme,
+          width,
+          hourStep,
+          minuteStep,
+          secondStep,
+          inputReadOnly
         }}
       >
-        <Popper
-          show={showPanel}
-          zIndex={1050}
-          overlayClassName={overlayClassName}
-          topGap={0}
-          leftGap={0}
-          width={false}
-          className={popperCls}
-          placement={placement}
-          onClickOutside={clickOutsideEvent}
+        <Root
+          inputChangeEvent={inputChangeEvent}
+          onClear={onClear}
+          showPanel={showPanel}
+          inputFocus={inputFocus}
+          onTrigger={() => {
+            setShowPanel(true)
+            setInputFocus(true)
+          }}
         >
-          {type.includes('range') || type === 'timeperiod' ? <RangePanel /> : <Panel />}
-        </Popper>
-      </Root>
-    </DPContext.Provider>
+          <Popper
+            show={showPanel}
+            zIndex={1050}
+            overlayClassName={overlayClassName}
+            topGap={0}
+            leftGap={0}
+            width={false}
+            className={popperCls}
+            placement={placement}
+            onClickOutside={clickOutsideEvent}
+          >
+            {type.includes('range') || type === 'timeperiod' ? <RangePanel /> : <Panel />}
+          </Popper>
+        </Root>
+      </DPContext.Provider>
+    </KeyHandler>
   )
 }
 export default Provider(BasePicker)

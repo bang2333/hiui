@@ -66,6 +66,7 @@ const SingleInput = (props) => {
           })}
         >
           <input
+            className="mousetrap"
             type="text"
             value={selectedItems.length > 0 ? placeholder : ''}
             placeholder={placeholder}

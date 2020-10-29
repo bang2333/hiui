@@ -110,7 +110,14 @@ const MultipleInput = ({
         )}
         {searchable && !disabled && (
           <div className="hi-select__input--search">
-            <input type="text" onKeyDown={handleKeyDown} onFocus={onFocus} onBlur={onBlur} readOnly />
+            <input
+              type="text"
+              onKeyDown={handleKeyDown}
+              onFocus={onFocus}
+              onBlur={onBlur}
+              className="mousetrap"
+              readOnly
+            />
           </div>
         )}
       </div>

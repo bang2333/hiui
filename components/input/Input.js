@@ -102,14 +102,11 @@ class Input extends Component {
       'clearable'
     ])
     return (
-      <KeyHandler keyhandleList={[
-        {
-          code: 'enter',
-          callback:()=>{
-            console.log('触发回车事件')
-          }
+      <KeyHandler keyshandle={{
+        enter:()=>{
+          console.log('触发回车事件')
         }
-      ]}>
+      }}>
       <div
         className={classNames('hi-input__out', {
           'hi-input--prepend': prepend,

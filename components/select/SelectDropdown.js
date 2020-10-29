@@ -251,7 +251,7 @@ const SelectDropdown = ({
               <Icon name="search" />
             </span>
             <input
-              className="hi-select__dropdown__searchbar--input"
+              className="hi-select__dropdown__searchbar--input mousetrap"
               placeholder={searchPlaceholder}
               clearable="true"
               ref={searchbar}
