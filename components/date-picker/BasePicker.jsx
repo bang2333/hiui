@@ -138,10 +138,10 @@ const BasePicker = ({
   )
   const keyshandle = {
     backspace: () => {
-      console.log('删除')
+      console.log('删除：date-picker')
     },
     enter: () => {
-      console.log('点击回车')
+      console.log('点击回车：date-picker')
     }
   }
   return (

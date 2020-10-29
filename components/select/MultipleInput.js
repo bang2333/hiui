@@ -71,6 +71,7 @@ const MultipleInput = ({
       )}
       ref={tagWrapperRef}
       onClick={onClick}
+      tabIndex="0"
     >
       {selectedItems.length === 0 && <div className="hi-select__input--placeholder">{placeholder}</div>}
       <div

@@ -42,6 +42,10 @@
     border-color: use-color('primary');
   }
 
+  &:not(.disabled):focus {
+    border-color: use-color('primary');
+  }
+
   &__focus:not(.disabled) {
     border-color: use-color('primary');
   }

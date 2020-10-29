@@ -15,11 +15,11 @@ const KeyHandler = ({ children, keyshandle = [] }) => {
   return (
     <div
       id="hi-key-handler"
-      style={{ display: 'inline-block' }}
-      onFocus={() => {
+      style={{ display: 'inline-block', width: '100%' }}
+      onFocus={(e) => {
         bindKeyCallback()
         setIsFocus(true)
-        console.log('聚焦')
+        console.log('聚焦', e)
       }}
       onBlur={() => {
         !inSide && window.Mousetrap.reset()

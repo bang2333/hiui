@@ -397,7 +397,13 @@ const InternalSelect = (props) => {
     : null
   const keyshandle = {
     backspace: () => {
-      console.log('删除')
+      console.log('删除： select')
+    },
+    up: () => {
+      console.log('up，select')
+    },
+    down: () => {
+      console.log('down，select')
     }
   }
   return (

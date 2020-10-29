@@ -49,6 +49,7 @@ const SingleInput = (props) => {
         }
       )}
       onClick={onClick}
+      tabIndex="0"
     >
       <div
         className={classNames('hi-select__input--item', {

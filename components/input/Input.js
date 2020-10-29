@@ -101,12 +101,16 @@ class Input extends Component {
       'innerRef',
       'clearable'
     ])
+    const keyshandle = {
+      backspace: () => {
+        console.log('删除： input')
+      },
+      enter: () => {
+        console.log('enter： input')
+      }
+    }
     return (
-      <KeyHandler keyshandle={{
-        enter:()=>{
-          console.log('触发回车事件')
-        }
-      }}>
+      <KeyHandler keyshandle={keyshandle}>
       <div
         className={classNames('hi-input__out', {
           'hi-input--prepend': prepend,
