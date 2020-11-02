@@ -5,6 +5,7 @@ import Classnames from 'classnames'
 import Provider from '../context/index'
 import Button from '../button'
 import Icon from '../icon'
+import KeyHandler from '../key-handler'
 import './style/index'
 
 const PREFIX = 'hi-modal'
@@ -34,7 +35,8 @@ const InternalModalComp = ({
   style,
   className,
   destroyOnClose,
-  localeDatas
+  localeDatas,
+  displayName = 'modal'
 }) => {
   // TODO: 整体可以抽成一个 hooks 供 modal 和 drawer 复用
   const defaultContainer = useRef(false)
@@ -65,90 +67,96 @@ const InternalModalComp = ({
       }
     }
   }, [vi])
-
+  const keyshandle = {
+    esc: () => {
+      console.log('esc: model')
+    }
+  }
   return createPortal(
-    <div
-      className={Classnames(PREFIX, {
-        [className]: className
-      })}
-    >
+    <KeyHandler keyshandle={keyshandle} displayName="modal">
       <div
-        className={Classnames(`${PREFIX}__mask`, {
-          [`${PREFIX}__mask--visible`]: visible
+        className={Classnames(PREFIX, {
+          [className]: className
         })}
-        onClick={() => {
-          if (maskClosable && onCancel) {
-            onCancel()
-          }
-        }}
-      />
-      <div className={`${PREFIX}__container`} style={{ display: vi === false && 'none' }}>
-        <CSSTransition
-          in={visible}
-          timeout={0}
-          classNames={'modal-transition'}
-          onExited={() => {
-            setTimeout(() => setVi(false), 300)
+      >
+        <div
+          className={Classnames(`${PREFIX}__mask`, {
+            [`${PREFIX}__mask--visible`]: visible
+          })}
+          onClick={() => {
+            if (maskClosable && onCancel) {
+              onCancel()
+            }
           }}
-        >
-          <div
-            className={Classnames(`${PREFIX}__wrapper`, `${PREFIX}__wrapper--${size}`)}
-            style={{ width, height, ...style }}
+        />
+        <div className={`${PREFIX}__container`} style={{ display: vi === false && 'none' }}>
+          <CSSTransition
+            in={visible}
+            timeout={0}
+            classNames={'modal-transition'}
+            onExited={() => {
+              setTimeout(() => setVi(false), 300)
+            }}
           >
             <div
-              className={Classnames(`${PREFIX}__header`, {
-                [`${PREFIX}__header--divided`]: showHeaderDivider
-              })}
+              className={Classnames(`${PREFIX}__wrapper`, `${PREFIX}__wrapper--${size}`)}
+              style={{ width, height, ...style }}
             >
-              {title}
-              <Icon
-                name={'close'}
-                style={{ cursor: 'pointer' }}
-                onClick={() => {
-                  if (onCancel) {
-                    onCancel()
-                  }
-                }}
-              />
-            </div>
-            <div className={`${PREFIX}__content`}>{children}</div>
-            {footer !== null && (
               <div
-                className={Classnames(`${PREFIX}__footer`, {
-                  [`${PREFIX}__footer--divided`]: showFooterDivider
+                className={Classnames(`${PREFIX}__header`, {
+                  [`${PREFIX}__header--divided`]: showHeaderDivider
                 })}
               >
-                {footer === undefined && cancelText !== null && (
-                  <Button
-                    type={'line'}
-                    onClick={() => {
-                      if (onCancel) {
-                        onCancel()
-                      }
-                    }}
-                  >
-                    {cancelText || localeDatas.modal.cancelText}
-                  </Button>
-                )}
-                {footer === undefined && confirmText !== null && (
-                  <Button
-                    type={'primary'}
-                    onClick={() => {
-                      if (onConfirm) {
-                        onConfirm()
-                      }
-                    }}
-                  >
-                    {confirmText || localeDatas.modal.confirmText}
-                  </Button>
-                )}
-                {footer}
+                {title}
+                <Icon
+                  name={'close'}
+                  style={{ cursor: 'pointer' }}
+                  onClick={() => {
+                    if (onCancel) {
+                      onCancel()
+                    }
+                  }}
+                />
               </div>
-            )}
-          </div>
-        </CSSTransition>
+              <div className={`${PREFIX}__content`}>{children}</div>
+              {footer !== null && (
+                <div
+                  className={Classnames(`${PREFIX}__footer`, {
+                    [`${PREFIX}__footer--divided`]: showFooterDivider
+                  })}
+                >
+                  {footer === undefined && cancelText !== null && (
+                    <Button
+                      type={'line'}
+                      onClick={() => {
+                        if (onCancel) {
+                          onCancel()
+                        }
+                      }}
+                    >
+                      {cancelText || localeDatas.modal.cancelText}
+                    </Button>
+                  )}
+                  {footer === undefined && confirmText !== null && (
+                    <Button
+                      type={'primary'}
+                      onClick={() => {
+                        if (onConfirm) {
+                          onConfirm()
+                        }
+                      }}
+                    >
+                      {confirmText || localeDatas.modal.confirmText}
+                    </Button>
+                  )}
+                  {footer}
+                </div>
+              )}
+            </div>
+          </CSSTransition>
+        </div>
       </div>
-    </div>,
+    </KeyHandler>,
     container || defaultContainer.current
   )
 }

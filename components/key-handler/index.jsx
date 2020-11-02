@@ -1,17 +1,22 @@
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 
 import './mousetrap.js'
-const KeyHandler = ({ children, keyshandle = [] }) => {
+const KeyHandler = ({ children, keyshandle = [], displayName }) => {
   const [inSide, setInSide] = useState(false)
   const [isFocus, setIsFocus] = useState(false)
   const bindKeyCallback = useCallback(() => {
     Object.keys(keyshandle).forEach((code) => {
       window.Mousetrap.bind(code, (e) => {
-        console.log(document.activeElement.nodeName)
+        e.stopPropagation()
         keyshandle[code](e, document.activeElement.nodeName)
       })
     })
   }, [keyshandle])
+  useCallback(() => {
+    const modal = document.querySelector('hi-modal')
+    const mousetrapModal = new Mousetrap(modal)
+    mousetrapModal.bind('esc', (e) => {})
+  }, [children])
   return (
     <div
       id="hi-key-handler"
@@ -29,6 +34,12 @@ const KeyHandler = ({ children, keyshandle = [] }) => {
       onMouseEnter={() => {
         setInSide(true)
         console.log('移入')
+        if (displayName && displayName === 'modal') {
+          window.Mousetrap.bind('esc', (e) => {
+            keyshandle.esc(e, document.activeElement.nodeName)
+            window.Mousetrap.unbind('esc')
+          })
+        }
       }}
       onMouseLeave={() => {
         !isFocus && window.Mousetrap.reset()
