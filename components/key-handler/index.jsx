@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useState } from 'react'
 
 import './mousetrap.js'
 const KeyHandler = ({ children, keyshandle = [], displayName }) => {
@@ -12,43 +12,59 @@ const KeyHandler = ({ children, keyshandle = [], displayName }) => {
       })
     })
   }, [keyshandle])
-  useCallback(() => {
-    const modal = document.querySelector('hi-modal')
-    const mousetrapModal = new Mousetrap(modal)
-    mousetrapModal.bind('esc', (e) => {})
-  }, [children])
+  const { onFocus, onBlur, onMouseEnter, onMouseLeave, onKeyDown } = children.props
   return (
-    <div
-      id="hi-key-handler"
-      style={{ display: 'inline-block', width: '100%' }}
-      onFocus={(e) => {
-        bindKeyCallback()
-        setIsFocus(true)
-        console.log('聚焦', e)
-      }}
-      onBlur={() => {
-        !inSide && window.Mousetrap.reset()
-        setIsFocus(false)
-        console.log('失去焦点')
-      }}
-      onMouseEnter={() => {
-        setInSide(true)
-        console.log('移入')
-        if (displayName && displayName === 'modal') {
-          window.Mousetrap.bind('esc', (e) => {
-            keyshandle.esc(e, document.activeElement.nodeName)
-            window.Mousetrap.unbind('esc')
-          })
+    <>
+      {React.cloneElement(children, {
+        onKeyDown: (e) => {
+          if (displayName && displayName === 'modal') {
+            console.log('添加按键')
+            window.Mousetrap.bind('esc', (e) => {
+              console.log('document.activeElement.nodeName', document.activeElement.nodeName)
+              keyshandle.esc(e, document.activeElement.nodeName)
+              window.Mousetrap.unbind('esc')
+            })
+          }
+          onKeyDown && onKeyDown(e)
+        },
+        tabIndex: 0,
+        onFocus: (e) => {
+          if (displayName && displayName === 'modal') {
+            onFocus && onFocus(e)
+            return
+          }
+          bindKeyCallback()
+          setIsFocus(true)
+          console.log('聚焦', e)
+        },
+        onBlur: (e) => {
+          if (displayName && displayName === 'modal') {
+            onBlur && onBlur(e)
+            return
+          }
+          !inSide && window.Mousetrap.reset()
+          setIsFocus(false)
+          console.log('失去焦点')
+        },
+        onMouseEnter: (e) => {
+          if (displayName && displayName === 'modal') {
+            onMouseEnter && onMouseEnter(e)
+            return
+          }
+          setInSide(true)
+          console.log('移入')
+        },
+        onMouseLeave: (e) => {
+          if (displayName && displayName === 'modal') {
+            onMouseLeave && onMouseLeave(e)
+            return
+          }
+          !isFocus && window.Mousetrap.reset()
+          setInSide(false)
+          console.log('移出')
         }
-      }}
-      onMouseLeave={() => {
-        !isFocus && window.Mousetrap.reset()
-        setInSide(false)
-        console.log('移出')
-      }}
-    >
-      {children}
-    </div>
+      })}
+    </>
   )
 }
 

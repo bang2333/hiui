@@ -404,6 +404,10 @@ const InternalSelect = (props) => {
     },
     down: () => {
       console.log('down，select')
+    },
+    esc: (e) => {
+      e.stopPropagation()
+      console.log('esc, select')
     }
   }
   return (
